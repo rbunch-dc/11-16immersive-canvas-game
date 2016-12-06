@@ -21,6 +21,8 @@
 	var backgroundImage = new Image();
 	backgroundImage.src = "background.png";
 
+	var speedModifier = 1;
+
 	// Make a var for our hero. He is an image!
 	var hero = new Image();
 	hero.src = "hero.png";
@@ -81,16 +83,24 @@
 	function update(){
 		// User pressed right at some point because it's in the array. Move right.
 		if(39 in keysDown){
-			heroLocation.x += 10;
+			if(heroLocation.x <= 400){
+				heroLocation.x += (10 * speedModifier);
+			}
 		}
 		if(37 in keysDown){
-			heroLocation.x -= 10;
+			if(heroLocation.x >= 10){
+				heroLocation.x -= (10 * speedModifier);
+			}
 		}		
 		if(38 in keysDown){
-			heroLocation.y -= 10;
+			if(heroLocation.y >= 10){
+				heroLocation.y -= (10 * speedModifier);
+			}
 		}
 		if(40 in keysDown){
-			heroLocation.y += 10;
+			if(heroLocation.y <= 400){
+				heroLocation.y += (10 * speedModifier);
+			}
 		}
 
 		if(
@@ -100,6 +110,11 @@
 			&& (monsterLocation.y <= heroLocation.y + 32)
 		){
 			// console.log("Hero is within 32 of the monster");
+			console.log("Hero caught the monster");
+			var random = Math.random() * 200;
+			var random2 = Math.random() * 200;
+			monsterLocation.x = random;
+			monsterLocation.y = random2;
 		}else{
 			// console.log("Hero is not close enough!");
 		}
