@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas Game!</title>
+</head>
+<body>
+
+<script type="text/javascript">
+// console.dir(document.body);
+	// Create the canvas tag with JS
+	var canvas = document.createElement('canvas');
+	// Crate a context for JS to play with (methods, properties, blah blah blah)
+	var context = canvas.getContext('2d')
+	// Give the canvas some height and width
+	canvas.width = 512;
+	canvas.height = 480;
+
+	// Add the canvas tag to the DOM
+	document.body.appendChild(canvas);
+
+	var backgroundImage = new Image();
+	backgroundImage.src = "background.png";
+
+	function draw(){
+		// Put our BGImage on the context, at x = 0, y = 0
+		context.drawImage(backgroundImage,0,0);
+		requestAnimationFrame(draw);
+	}
+
+draw();
+
+</script>
+
+</body>
+</html>
