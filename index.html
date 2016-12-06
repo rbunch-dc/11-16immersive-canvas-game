@@ -21,9 +21,98 @@
 	var backgroundImage = new Image();
 	backgroundImage.src = "background.png";
 
+	// Make a var for our hero. He is an image!
+	var hero = new Image();
+	hero.src = "hero.png";
+	var heroLocation = {
+		x: 100,
+		y: 100
+	}
+
+
+	// Make a var for our bad guy. He is an image!
+	var monster = new Image();
+	monster.src = "monster.png";
+	var monsterLocation = {
+		x: 200,
+		y: 100
+	}
+
+	// An array to hold all the keys that are currently pressed down.
+	var keysDown = [];
+
+	addEventListener('keyup', function(event){
+		delete keysDown[event.keyCode];
+	});
+
+	// We need a way to tell if the user has pushed an arrow key!
+	addEventListener('keydown', function(event){
+		keysDown[event.keyCode] = true;
+		// console.log(keysDown);
+		// if keyDown[39] is true, then user pushed the right arrow
+		// if keyDown[40] is true, then user pushed the down arrow		
+		// if keyDown[37] is true, then user pushed the left arrow		
+		// if keyDown[38] is true, then user pushed the up arrow		
+
+		// we know a key was pressed, or we wouldn't be in here
+		// What key did they press?
+		// console.log(event);
+		// if(event.key === 'ArrowDown'){
+		// 	console.log('User pressed down arrow');
+		// 	heroLocation.y += 10;
+		// }
+		// if(event.key === 'ArrowUp'){
+		// 	console.log('User pressed up arrow');
+		// 	heroLocation.y -= 10;
+		// }
+		// if(event.key === 'ArrowLeft'){
+		// 	console.log('User pressed left arrow');
+		// 	heroLocation.x -= 10;
+		// }
+		// if(event.key === 'ArrowRight'){
+		// 	console.log('User pressed right arrow');
+		// 	heroLocation.x += 10;
+		// }
+
+
+	});
+
+	// This is where we will update the hero based on what's true in keysDown
+	function update(){
+		// User pressed right at some point because it's in the array. Move right.
+		if(39 in keysDown){
+			heroLocation.x += 10;
+		}
+		if(37 in keysDown){
+			heroLocation.x -= 10;
+		}		
+		if(38 in keysDown){
+			heroLocation.y -= 10;
+		}
+		if(40 in keysDown){
+			heroLocation.y += 10;
+		}
+
+		if(
+			(heroLocation.x <= monsterLocation.x + 32)
+			&& (heroLocation.y <= monsterLocation.y + 32)
+			&& (monsterLocation.x <= heroLocation.x + 32)
+			&& (monsterLocation.y <= heroLocation.y + 32)
+		){
+			// console.log("Hero is within 32 of the monster");
+		}else{
+			// console.log("Hero is not close enough!");
+		}
+
+	}
+
+// KEEP THIS AT THE BOTTOM
 	function draw(){
+		update();
 		// Put our BGImage on the context, at x = 0, y = 0
 		context.drawImage(backgroundImage,0,0);
+		context.drawImage(hero, heroLocation.x, heroLocation.y);
+		context.drawImage(monster, monsterLocation.x, monsterLocation.y);
 		requestAnimationFrame(draw);
 	}
 
