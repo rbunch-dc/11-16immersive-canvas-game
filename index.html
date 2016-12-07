@@ -2,21 +2,55 @@
 <html>
 <head>
 	<title>Canvas Game!</title>
+	<style type="text/css" media="screen">
+		#timer, button, input{
+			width:  20%;
+			display:  block;
+			text-align: center;
+			margin: auto;
+		}
+		#game{
+			display:  block;
+			margin:  auto;
+		}
+	</style>
 </head>
 <body>
 
 <canvas id="game"></canvas>
 <div id="timer">30 seconds</div>
+<div id="score">Score: <span id="score-value">0</span></div>
+<div id="hi-score">High Score: <span id="hi-score-value">0</span></div>
 <button onclick="startGame();">Start Game</button>
 <button onclick="newPlayer()">New Player</button>
 <input id="player-name" type="text" placeholder="Player Name">
 
 
 <script type="text/javascript">
+
+// 1. Style. Make it look not-like Rob made it.
+// 2. Find a way to keep score. In order to do this, update your variable inside the collision detector. (Be creative with this -- remember the rupees? Blue = 5, green = 1)
+// 3. Create a constructor function called "Player" that has a name and high score property. Initializes high score to 0, set the player name to the value of the input box.
+// 4. When the player clicks "New Player" make number 3 create them.
+// 5. At the end of the timer, update the current user's high score property.
+
+// NOTE: you will want an array called "players" and each time you create a new player, push them on to the array.
+
+function Player(name){
+	this.name = name;
+	this.highscore = 0;
+}
+
+// Could also do this!
+// Player.prototype.highscore = 0;
+
 function newPlayer(){
 	var playerNameDiv = document.getElementById('player-name');
 	var playerName = playerNameDiv.value;
-	console.log(playerName);
+	var player = new Player(playerName);
+	playerArray.push(player);
+	console.log(playerArray);
+	// console.log(playerName);
 	// console.dir(playerNameDiv);
 }
 
@@ -27,9 +61,11 @@ function startGame(){
 	gameOn = true;
 	//user started the game. Save the time. Save the time + 30
 	gameStart = Date.now();
-	gameEnd = Date.now() + 3000;
+	gameEnd = Date.now() + 30000;
 	// start the interval
 	timerInterval = setInterval(updateTimer, 500);
+	currentPlayersScore = 0;
+	document.getElementById('score-value').innerHTML = 0;
 }
 
 function updateTimer(){
@@ -49,6 +85,9 @@ function updateTimer(){
 var gameStart = 0;
 var gameEnd = 0;
 var timerInterval;
+var playerArray = [];
+var highscore = 0;
+var currentPlayersScore = 0;
 
 // When clicked on, the game starts (timer starts, player can move)
 // When clicked on, get Date.now() and save it to current date
@@ -71,8 +110,8 @@ var timerInterval;
 	// Crate a context for JS to play with (methods, properties, blah blah blah)
 	var context = canvas.getContext('2d')
 	// Give the canvas some height and width
-	// canvas.width = 512;
-	// canvas.height = 480;
+	canvas.width = 512;
+	canvas.height = 480;
 
 	// Add the canvas tag to the DOM
 	document.body.appendChild(canvas);
@@ -170,7 +209,20 @@ var timerInterval;
 			&& (monsterLocation.y <= heroLocation.y + 32)
 		){
 			// console.log("Hero is within 32 of the monster");
-			console.log("Hero caught the monster");
+			currentPlayersScore++;
+			document.getElementById('score-value').innerHTML = currentPlayersScore;
+			// We have updated the players score. Check it against highscore. If it's higher, we have a new highscore!!
+			if(currentPlayersScore > highscore){
+				highscore = currentPlayersScore;
+				document.getElementById('hi-score-value').innerHTML = highscore;
+			}
+			var currentPlayerIndex = playerArray.length-1;
+			console.log(playerArray[currentPlayerIndex]);
+			if(currentPlayersScore > playerArray[currentPlayerIndex].highscore){
+				playerArray[currentPlayerIndex].highscore = currentPlayersScore;
+			}
+
+
 			var random = Math.random() * 200;
 			var random2 = Math.random() * 200;
 			monsterLocation.x = random;
