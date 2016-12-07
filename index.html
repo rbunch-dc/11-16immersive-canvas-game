@@ -5,7 +5,64 @@
 </head>
 <body>
 
+<div id="timer">30 seconds</div>
+<button onclick="startGame();">Start Game</button>
+<button onclick="newPlayer()">New Player</button>
+<input id="player-name" type="text" placeholder="Player Name">
+
+
 <script type="text/javascript">
+function newPlayer(){
+	var playerNameDiv = document.getElementById('player-name');
+	var playerName = playerNameDiv.value;
+	console.log(playerName);
+	// console.dir(playerNameDiv);
+}
+
+
+// 2.Add a countdown timer.
+// Start game button.
+function startGame(){
+	gameOn = true;
+	//user started the game. Save the time. Save the time + 30
+	gameStart = Date.now();
+	gameEnd = Date.now() + 3000;
+	// start the interval
+	timerInterval = setInterval(updateTimer, 500);
+}
+
+function updateTimer(){
+	var newNow = Date.now();
+	// Subtract the gameend time from the current time.
+	var timeDifference = (gameEnd - newNow) / 1000;
+	if(timeDifference < 0){
+		clearInterval(timerInterval);
+		gameOn = false;
+		timeDifference = 0;
+		document.getElementById('timer').innerHTML = "Game Over!";		
+	}else{
+		document.getElementById('timer').innerHTML = timeDifference + " seconds";
+	}
+}
+
+var gameStart = 0;
+var gameEnd = 0;
+var timerInterval;
+
+// When clicked on, the game starts (timer starts, player can move)
+// When clicked on, get Date.now() and save it to current date
+// When clicked on, get Date.now() + 30 * 1000 milliseconds
+// Create a setINterval to run every X and inside, recalculate the timer
+// WHen the difference is < 0, stop the game, clear the timer, check highscore.
+
+
+// 1.Add a pause button
+// 2a. Once timer runs out, game is over.
+// 3.Keep score, by player
+// 3a. Make a player constructor - name (ask), high score
+// 3b.Make an input for player name
+// 3c.Make a button a new player.
+
 // console.dir(document.body);
 	// Create the canvas tag with JS
 	var canvas = document.createElement('canvas');
@@ -22,10 +79,11 @@
 	backgroundImage.src = "background.png";
 
 	var speedModifier = 1;
+	var gameOn = false;
 
 	// Make a var for our hero. He is an image!
 	var hero = new Image();
-	hero.src = "hero.png";
+	hero.src = "link1.png";
 	var heroLocation = {
 		x: 100,
 		y: 100
@@ -123,7 +181,9 @@
 
 // KEEP THIS AT THE BOTTOM
 	function draw(){
-		update();
+		if(gameOn){
+			update();
+		}
 		// Put our BGImage on the context, at x = 0, y = 0
 		context.drawImage(backgroundImage,0,0);
 		context.drawImage(hero, heroLocation.x, heroLocation.y);
